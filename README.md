@@ -32,12 +32,19 @@ Responsável por receber o código de autorização e o estado do usuário, como
 ### ➕ POST /webhook/events
 Responsável por receber notificação de criação de contatos vindos do HubSpot.
 
-
 #### Parametros
 | Parametro     | Tipo          |
 | ------------- |:-------------:|
 | event         | String        |
 
+#### Corpo
+```
+{
+    "email": "johndoe@gmail.com",
+    "fistName" : "John",
+    "lastName" : "Doe"
+}
+```
 ### ➕ POST /contact/
 Responsável pela criação de contatos, necessário passar como parametro o código state recebido como resposta à requisição em **/authorization/oauth-callback**.
 
