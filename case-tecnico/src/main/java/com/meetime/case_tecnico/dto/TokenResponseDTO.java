@@ -2,7 +2,9 @@ package com.meetime.case_tecnico.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TokenResponseDTO {
+import java.io.Serializable;
+
+public class TokenResponseDTO implements Serializable {
 
     @JsonProperty("access_token")
     private String accessToken;

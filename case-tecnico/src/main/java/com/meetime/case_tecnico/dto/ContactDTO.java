@@ -2,7 +2,9 @@ package com.meetime.case_tecnico.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ContactDTO {
+import java.io.Serializable;
+
+public class ContactDTO implements Serializable {
 
     private String email;
 

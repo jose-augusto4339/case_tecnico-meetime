@@ -1,6 +1,8 @@
 package com.meetime.case_tecnico.dto;
 
-public class WebhookEventDTO {
+import java.io.Serializable;
+
+public class WebhookEventDTO implements Serializable {
 
     private String subscriptionId;
 
