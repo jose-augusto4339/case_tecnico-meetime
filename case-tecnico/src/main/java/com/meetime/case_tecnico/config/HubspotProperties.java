@@ -13,9 +13,11 @@ public class HubspotProperties {
 
     private String redirectUri;
 
-    private String optionalScope;
+    private String scope;
 
-    private String state;
+    private String accessToken;
+
+    private String apiURL;
 
     public String getClientId() {
         return clientId;
@@ -41,19 +43,27 @@ public class HubspotProperties {
         this.redirectUri = redirectUri;
     }
 
-    public String getOptionalScope() {
-        return optionalScope;
+    public String getScope() {
+        return scope;
     }
 
-    public void setOptionalScope(String optionalScope) {
-        this.optionalScope = optionalScope;
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
-    public String getState() {
-        return state;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getApiURL() {
+        return apiURL;
+    }
+
+    public void setApiURL(String apiURL) {
+        this.apiURL = apiURL;
     }
 }
