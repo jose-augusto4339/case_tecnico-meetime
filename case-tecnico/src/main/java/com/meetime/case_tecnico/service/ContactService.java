@@ -35,8 +35,8 @@ public class ContactService {
 
         Map<String, Object> properties = new HashMap<>();
         properties.put("email", contactRequest.getEmail());
-        properties.put("firstname", contactRequest.getFirstName());
-        properties.put("lastname", contactRequest.getLastName());
+        properties.put("firstname", contactRequest.getFirstname());
+        properties.put("lastname", contactRequest.getLastname());
 
         Map<String, Object> body = new HashMap<>();
         body.put("properties", properties);
