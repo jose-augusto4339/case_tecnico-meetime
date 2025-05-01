@@ -15,9 +15,9 @@ public class HubspotProperties {
 
     private String scope;
 
-    private String accessToken;
-
     private String apiURL;
+
+    private String authorizeUri;
 
     public String getClientId() {
         return clientId;
@@ -51,19 +51,19 @@ public class HubspotProperties {
         this.scope = scope;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
     public String getApiURL() {
         return apiURL;
     }
 
     public void setApiURL(String apiURL) {
         this.apiURL = apiURL;
+    }
+
+    public String getAuthorizeUri() {
+        return authorizeUri;
+    }
+
+    public void setAuthorizeUri(String authorizeUri) {
+        this.authorizeUri = authorizeUri;
     }
 }

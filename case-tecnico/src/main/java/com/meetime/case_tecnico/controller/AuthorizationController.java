@@ -1,7 +1,9 @@
 package com.meetime.case_tecnico.controller;
 
 import com.meetime.case_tecnico.service.AuthorizationService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +24,13 @@ public class AuthorizationController {
     }
 
     @GetMapping("/oauth-callback")
-    public ResponseEntity<String> handleOAuthCallback(@RequestParam("code") String code) {
-        String accessToken = authService.exchangeCodeForAccessToken(code);
-        return ResponseEntity.ok("Access token: " + accessToken);
+    public ResponseEntity<String> handleOAuthCallback(@RequestParam("code") String code, @RequestParam("state") String state) {
+        String userState = authService.getStateData(state);
+        if (userState == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid state parameter");
+        }
+
+        String accessToken = authService.exchangeCodeForAccessToken(code, state);
+        return ResponseEntity.ok("User state: " + state);
     }
 }

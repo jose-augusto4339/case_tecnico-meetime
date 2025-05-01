@@ -1,7 +1,10 @@
 package com.meetime.case_tecnico.service;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.meetime.case_tecnico.config.HubspotProperties;
 import com.meetime.case_tecnico.dto.TokenResponseDTO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AuthorizationService {
@@ -23,21 +27,32 @@ public class AuthorizationService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public AuthorizationService(HubspotProperties hubProps){
+    private final TokenService tokenService;
+
+    public AuthorizationService(HubspotProperties hubProps, TokenService tokenService){
         this.hubProps = hubProps;
+        this.tokenService = tokenService;
     }
 
+    private Cache<String, String> stateCache = Caffeine.newBuilder()
+            .expireAfterWrite(10, TimeUnit.MINUTES) // Expira em 10 minutos
+            .build();
+
     public String generateAuthorizationUrl() {
-        return UriComponentsBuilder.fromUriString("https://app.hubspot.com/oauth/authorize")
+        String state = UUID.randomUUID().toString();
+
+        stateCache.put(state, "user-state");
+
+        return UriComponentsBuilder.fromUriString(hubProps.getAuthorizeUri())
                 .queryParam("client_id", hubProps.getClientId())
                 .queryParam("redirect_uri", hubProps.getRedirectUri())
                 .queryParam("scope", hubProps.getScope())
-                .queryParam("state", UUID.randomUUID().toString())
+                .queryParam("state",  state)
                 .build()
                 .toUriString();
     }
 
-    public String exchangeCodeForAccessToken(String code) {
+    public String exchangeCodeForAccessToken(String code, String state) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", hubProps.getClientId());
@@ -50,7 +65,17 @@ public class AuthorizationService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
         ResponseEntity<TokenResponseDTO> response = restTemplate.postForEntity("https://api.hubapi.com/oauth/v1/token", request, TokenResponseDTO.class);
-        return response.getBody() != null ? response.getBody().getAccessToken() : null;
+
+        if (response.getBody() != null) {
+            String token = response.getBody().getAccessToken();
+            tokenService.storeToken(state, token);
+            return token;
+        }
+        return null;
+    }
+
+    public String getStateData(String state) {
+        return stateCache.getIfPresent(state);
     }
 }
 

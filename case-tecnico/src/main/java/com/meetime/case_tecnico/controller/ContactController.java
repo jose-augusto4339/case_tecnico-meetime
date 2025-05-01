@@ -2,6 +2,7 @@ package com.meetime.case_tecnico.controller;
 
 import com.meetime.case_tecnico.dto.ContactDTO;
 import com.meetime.case_tecnico.service.ContactService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +16,8 @@ public class ContactController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String createContact(@RequestBody ContactDTO contactRequest) {
-        return contactService.createContact(contactRequest);
+    public String createContact(@RequestParam("state") String state, @RequestBody ContactDTO contactRequest) {
+        return contactService.createContact(contactRequest, state);
     }
 
 }
