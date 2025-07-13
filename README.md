@@ -1,4 +1,4 @@
-# Case técnico - Meetime
+# Integracao com HubSpot usando SpringBoot
 
 Este projeto trata-se de uma API REST, em Java 21 com SpringBoot, integrada à API do CRM do HubSpot.
 Esta API expões endpoints para autenticação via OAuth2.0, recebimento de notificações por Webhook e criação de contatos.
